@@ -1,0 +1,41 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "Rubens test Xtension",
+        "description": "Simple test Xtension"
+    },
+    "host": "pyro.prof-x.net",
+    "basePath": "/SimpleString/",
+    "schemes": [
+        "http"
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+        "/simplestring": {
+            "post": {
+              "summary": "Post a simple String",
+              "parameters": [
+              {
+                "name": "simplestring",
+                "x-ntx-summary": "My Simple String",
+                "in": "body",
+                "schema": {
+                  "type": "string"
+                }
+              }]
+              ,
+              "responses": {
+                "200": {
+                  "description": "OK"
+                }
+              }
+            }
+        }
+    }
+}
