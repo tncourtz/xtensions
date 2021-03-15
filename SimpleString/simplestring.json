@@ -1,41 +1,85 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "version": "1.0.0",
-        "title": "Rubens test Xtension",
-        "description": "Simple test Xtension"
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "Rubens test Xtension",
+    "description": "Simple test Xtension"
+  },
+  "host": "pyro.prof-x.net:8888",
+  "basePath": "/SimpleString/",
+  "schemes": ["http"],
+  "consumes": ["application/json"],
+  "produces": ["application/json"],
+  "paths": {
+    "/simplestring": {
+      "post": {
+        "summary": "Post a simple String",
+        "parameters": [
+          {
+            "name": "simplestring",
+            "x-ntx-summary": "My Simple String",
+            "in": "body",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     },
-    "host": "pyro.prof-x.net:8888",
-    "basePath": "/SimpleString/",
-    "schemes": [
-        "http"
-    ],
-    "consumes": [
-        "application/json"
-    ],
-    "produces": [
-        "application/json"
-    ],
-    "paths": {
-        "/simplestring": {
-            "post": {
-              "summary": "Post a simple String",
-              "parameters": [
-              {
-                "name": "simplestring",
-                "x-ntx-summary": "My Simple String",
-                "in": "body",
-                "schema": {
+    "/simplestring2": {
+      "post": {
+        "operationId": "simplestring2",
+        "summary": "Post a simple String in an object",
+        "parameters": [
+          {
+            "name": "simplestring2",
+            "x-ntx-summary": "My Simple String in the body",
+            "in": "body",
+            "schema": {
+              "properties": {
+                "MyString": {
                   "type": "string"
-                }
-              }]
-              ,
-              "responses": {
-                "200": {
-                  "description": "OK"
                 }
               }
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
         }
+      }
+    },
+    "/simplestring3": {
+      "post": {
+        "operationId": "simplestring3",
+        "summary": "Post a simple String (named utc) in an object",
+        "parameters": [
+          {
+            "name": "utc",
+            "x-ntx-summary": "My Simple String (named UTC) in the body",
+            "in": "body",
+            "schema": {
+              "properties": {
+                "utc": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
     }
+  }
 }
