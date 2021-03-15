@@ -3,4 +3,4 @@ dumps/
 bin/
 include/
 lib/
-lib64/
+lib64
