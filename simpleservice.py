@@ -32,9 +32,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         self.send_response(200)
         self.end_headers()
         response = BytesIO()
-        response.write(b'Received: ')
         response.write(body)
         self.wfile.write(response.getvalue())
+        # TODO: add name of tile to dump file.
+        # TODO: Dump file to console in well formatted JSON ?
+        print(body)
         f = open('dumps/%s.raw' % datetime.now(timezone.utc).isoformat(), "wb")
         f.write(body)
         f.close()
