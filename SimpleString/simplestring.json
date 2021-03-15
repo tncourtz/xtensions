@@ -1,9 +1,10 @@
 {
   "swagger": "2.0",
+  "x-ntx-render-version": 2,
   "info": {
-    "version": "1.0.0",
-    "title": "Rubens test Xtension",
-    "description": "Simple test Xtension"
+    "version": "1.1.0",
+    "title": "Rubens test Xtension - v2",
+    "description": "Simple test Xtension v2"
   },
   "host": "pyro.prof-x.net:8888",
   "basePath": "/SimpleString/",
@@ -69,6 +70,48 @@
               "properties": {
                 "utc": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/realexample": {
+      "post": {
+        "summary": "Bug report",
+        "parameters": [
+          {
+            "name": "Body details",
+            "x-ntx-summary": "",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "properties": {
+                "event": {
+                  "x-ntx-summary": "",
+                  "type": "object",
+                  "additionalProperties": false,
+                  "properties": {
+                    "start": {
+                      "x-ntx-summary": "Start",
+                      "type": "object",
+                      "additionalProperties": false,
+                      "properties": {
+                        "utc": {
+                          "x-ntx-summary": "Start UTC date/time",
+                          "type": "string",
+                          "default": "2021-07-26T10:00:00Z"
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
