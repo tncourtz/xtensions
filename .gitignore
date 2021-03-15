@@ -1,0 +1,6 @@
+dumps/
+.git/
+bin/
+include/
+lib/
+lib64/

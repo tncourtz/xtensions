@@ -5,7 +5,7 @@
         "title": "Rubens test Xtension",
         "description": "Simple test Xtension"
     },
-    "host": "pyro.prof-x.net",
+    "host": "pyro.prof-x.net:8888",
     "basePath": "/SimpleString/",
     "schemes": [
         "http"
