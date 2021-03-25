@@ -1,7 +1,10 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from io import BytesIO
 from datetime import datetime,timezone
+import ssl
 
+# Simple HTTP(s) web service to host files and be able to do simple request/response changes.
+# Inspired by: https://blog.anvileight.com/posts/simple-python-http-server/
 
 
 
@@ -42,22 +45,16 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         f.close()
 
 
-
-# import ssl
-# see https://blog.anvileight.com/posts/simple-python-http-server/#example-with-ssl-support
-#httpd.socket = ssl.wrap_socket (httpd.socket, 
-#        keyfile="path/to/key.pem", 
-#        certfile='path/to/cert.pem', server_side=True)
-
-
 def main():
     try:
-        server = HTTPServer(('', 8888), SimpleHTTPRequestHandler)
-        print ("started httpserver on port 8888...")
-        server.serve_forever()
+        httpd = HTTPServer(('', 8888), SimpleHTTPRequestHandler)
+        httpd.socket = ssl.wrap_socket(httpd.socket, keyfile="certificates/privkey1.pem", certfile="certificates/cert1.pem", server_side=True)
+        print ("started https-server on port 8888...")
+
+        httpd.serve_forever()
     except KeyboardInterrupt:
         print ("^C received, shutting down server")
-        server.socket.close()
+        httpd.socket.close()
 
 if __name__ == '__main__':
     main()
