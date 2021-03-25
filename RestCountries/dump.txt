@@ -1,0 +1,13 @@
+"default": "name;alpha2Code;alpha3Code;callingCodes;capital;region;subregion;timezones;borders;nativeName;numericCode;currencies;languages;Flag;cioc;latlng",
+
+
+"parameters": [
+    {
+      "in": "query",
+      "name": "fields",
+      "type": "string",
+      "default": "name;alpha2Code;alpha3Code;callingCodes;capital;region;subregion;timezones;borders;nativeName;numericCode;currencies;languages;Flag;cioc;latlng",
+      "x-ntx-initial": "name;alpha2Code;alpha3Code;callingCodes;capital;region;subregion;timezones;borders;nativeName;numericCode;currencies;languages;Flag;cioc;latlng",
+      "x-ntx-visibility": "internal"
+    }
+  ],
