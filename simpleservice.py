@@ -2,6 +2,7 @@ from http.server import HTTPServer, BaseHTTPRequestHandler
 from io import BytesIO
 from datetime import datetime,timezone
 import ssl
+import logging
 
 # Simple HTTP(s) web service to host files and be able to do simple request/response changes.
 # Inspired by: https://blog.anvileight.com/posts/simple-python-http-server/
@@ -9,9 +10,18 @@ import ssl
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
+    # supress all standard logging.
+    def log_message(self, format, *args):
+        return
 
     def do_GET(self):
+        # 192.168.1.1 - - [21/Apr/2021 10:22:45] "GET /favicon.ico HTTP/1.1" 200 -
+        logging.debug("%s %s", self.client_address[0], self.requestline)
+        for header in self.headers:
+            logging.info("HEADER %s:%s", header, self.headers[header])
+
         try:
+
             if self.path.endswith(".json"):
                 f = open(self.path[1:], 'rb')
                 self.send_response(200)
@@ -30,6 +40,11 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
 
     def do_POST(self):
+        logging.debug("%s %s", self.client_address[0], self.requestline)
+        for header in self.headers:
+            logging.info("HEADER %s:%s", header, self.headers[header])
+
+
         content_length = int(self.headers['Content-Length'])
         body = self.rfile.read(content_length)
         self.send_response(200)
@@ -46,14 +61,20 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
 
 def main():
+    logging.basicConfig(
+        encoding='utf-8',
+        level=logging.DEBUG,
+        format='%(asctime)s.%(msecs)03d %(levelname)8s %(module)s (%(funcName)s): %(message)s',
+        datefmt='%Y-%m-%d %H:%M:%S',
+        )
     try:
         httpd = HTTPServer(('', 8888), SimpleHTTPRequestHandler)
         httpd.socket = ssl.wrap_socket(httpd.socket, keyfile="certificates/privkey1.pem", certfile="certificates/cert1.pem", server_side=True)
-        print ("started https-server on port 8888...")
+        logging.info("Started https-server on port 8888...")
 
         httpd.serve_forever()
     except KeyboardInterrupt:
-        print ("^C received, shutting down server")
+        logging.info("^C received, shutting down server")
         httpd.socket.close()
 
 if __name__ == '__main__':
