@@ -1,0 +1,9 @@
+{
+	"Name": "Ruben",
+	"DoB": "1982-06-01",
+	"Address": {
+		"Street": "Jenkystreet",
+		"Housenr": 6,
+		"City": "London"
+	}
+}

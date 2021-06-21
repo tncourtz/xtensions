@@ -69,7 +69,7 @@ def main():
         )
     try:
         httpd = HTTPServer(('', 8888), SimpleHTTPRequestHandler)
-        httpd.socket = ssl.wrap_socket(httpd.socket, keyfile="certificates/privkey1.pem", certfile="certificates/cert1.pem", server_side=True)
+        httpd.socket = ssl.wrap_socket(httpd.socket, keyfile="certificates/privkey2.pem", certfile="certificates/cert2.pem", server_side=True)
         logging.info("Started https-server on port 8888...")
 
         httpd.serve_forever()
