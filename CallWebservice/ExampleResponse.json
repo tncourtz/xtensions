@@ -1,0 +1,21 @@
+{
+  "HTTPStatus": {
+    "HTTPStatusCode": "200",
+    "HTTPStatusMessage": "OK"
+  },
+  "NintexGatewayStatus": {
+    "NintexGatewayStatusCode": "OK",
+    "NintexGatewayMessage": ""
+  },
+  "Headers": [
+    {
+      "HeaderName": "Content-type",
+      "HeaderValue": "text/html"
+    },
+    {
+      "HeaderName": "Content-Length",
+      "HeaderValue": "233"
+    }
+  ],
+  "Response": "This is the response. It could also be escaped JSON"
+}

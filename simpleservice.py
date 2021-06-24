@@ -1,7 +1,7 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from io import BytesIO
 from datetime import datetime,timezone
-import ssl
+# import ssl
 import logging
 
 # Simple HTTP(s) web service to host files and be able to do simple request/response changes.
@@ -68,9 +68,9 @@ def main():
         datefmt='%Y-%m-%d %H:%M:%S',
         )
     try:
-        httpd = HTTPServer(('', 8888), SimpleHTTPRequestHandler)
-        httpd.socket = ssl.wrap_socket(httpd.socket, keyfile="certificates/privkey2.pem", certfile="certificates/cert2.pem", server_side=True)
-        logging.info("Started https-server on port 8888...")
+        httpd = HTTPServer(('127.0.0.1', 8888), SimpleHTTPRequestHandler)
+        # httpd.socket = ssl.wrap_socket(httpd.socket, keyfile="certificates/privkey2.pem", certfile="certificates/cert2.pem", server_side=True)
+        logging.info("Started http-server on port 8888...")
 
         httpd.serve_forever()
     except KeyboardInterrupt:
