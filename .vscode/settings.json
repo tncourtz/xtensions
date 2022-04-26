@@ -1,4 +1,5 @@
 {
     "editor.formatOnSave": true,
-    "prettier.printWidth": 150
+    "prettier.printWidth": 150,
+    "editor.guides.bracketPairs": true
 }

@@ -1,12 +1,13 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
 from io import BytesIO
 from datetime import datetime,timezone
-# import ssl
+import os
 import logging
+import time
+from urllib.parse import urlparse,parse_qs
 
 # Simple HTTP(s) web service to host files and be able to do simple request/response changes.
 # Inspired by: https://blog.anvileight.com/posts/simple-python-http-server/
-
 
 
 class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
@@ -20,30 +21,45 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         for header in self.headers:
             logging.info("HEADER %s:%s", header, self.headers[header])
 
-        try:
+        url = urlparse(self.path)
+        if url.query:
+            logging.info(parse_qs(url.query))
+        logging.info("----------------------")
 
-            if self.path.endswith(".json"):
-                f = open(self.path[1:], 'rb')
+        try:
+            filetoread = url.path[1:]
+            
+            if os.path.exists(self.path[1:]):
+                filetoread = self.path[1:]
+
+            if os.path.exists(filetoread):
                 self.send_response(200)
-                self.send_header('Content-type', 'application/json')
+                if url.path.endswith(".json"):
+                    self.send_header('Content-type', 'application/json')
+                
                 self.end_headers()
+                f = open(filetoread, 'rb')
                 self.wfile.write(f.read())
                 f.close()
                 return
             else:
-                self.send_response(200, "Thanks")
+                logging.debug(f"file DOES NOT exists: {filetoread}")
+                self.send_error(404, f"File Not Found: {self.path}")
                 self.end_headers()
                 return
 
-        except IOError:
-            self.send_error(404,'File Not Found: %s' % self.path)
+        except BaseException as err:
+            logging.debug(err)
+            self.send_error(500, f"Unexpected {err=}, {type(err)=}")
+            return
 
+        
 
     def do_POST(self):
         logging.debug("%s %s", self.client_address[0], self.requestline)
         for header in self.headers:
             logging.info("HEADER %s:%s", header, self.headers[header])
-
+        logging.info("----------------------")
 
         content_length = int(self.headers['Content-Length'])
         body = self.rfile.read(content_length)
@@ -68,8 +84,7 @@ def main():
         datefmt='%Y-%m-%d %H:%M:%S',
         )
     try:
-        httpd = HTTPServer(('127.0.0.1', 8888), SimpleHTTPRequestHandler)
-        # httpd.socket = ssl.wrap_socket(httpd.socket, keyfile="certificates/privkey2.pem", certfile="certificates/cert2.pem", server_side=True)
+        httpd = HTTPServer(('0.0.0.0', 8888), SimpleHTTPRequestHandler)
         logging.info("Started http-server on port 8888...")
 
         httpd.serve_forever()
