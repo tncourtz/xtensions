@@ -1,0 +1,96 @@
+{
+  "swagger": "2.0",
+  "x-ntx-render-version": 2,
+  "info": {
+    "description": "Ruben's validate check",
+    "version": "0.1",
+    "title": "Validate check v0.1"
+  },
+  "host": "dev.prof-x.net",
+  "schemes": ["https"],
+  "security": [
+    {
+      "basicAuth": []
+    }
+  ],
+  "paths": {
+    "/validatecall/validateresponse.json": {
+      "get": {
+        "summary": "Perform validation",
+        "operationId": "validateConnection",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 good"
+          },
+          "204": {
+            "description": "204 GOOD"
+          },
+          "default": {
+            "description": "DEFAULT FAILED"
+          }
+        }
+      }
+    },
+    "/validatecall/data.json": {
+      "get": {
+        "summary": "Get some data",
+        "operationId": "getdata",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "html",
+            "type": "string",
+            "required": true,
+            "description": "Some text"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Some Response",
+            "schema": {
+              "$ref": "#/definitions/response"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "response": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Description": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "basicAuth": {
+      "type": "basic",
+      "x-ntx-connection-validation": {
+        "operationId": "validateConnection"
+      },
+      "x-ntx-connection-properties": {
+        "type": "object",
+        "required": ["username", "password"],
+        "properties": {
+          "username": {
+            "type": "string",
+            "title": "Domain\\Username",
+            "description": "Example: Denallix\\Bob"
+          },
+          "password": {
+            "type": "string",
+            "title": "Password"
+          }
+        }
+      }
+    }
+  }
+}
