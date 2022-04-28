@@ -11,7 +11,13 @@ python3.9 -m venv .
 source bin/activate
 ```
 
+Up until now, there's no additional requirements/packages needed to run this.
+
+
 ## HTTPS
 
-The web service can uses HTTPS. I just get the \*.pem files from the letencrypt directory and copy all pem files from `/etc/letsencrypt/archive/pyro.prof-x.net` into here. That will have to happen every time new certs are created.
-The `certifcates` folder is hidden via .gitigore.
+We had a complex setup with certificates being read/used in the code, and needing to update the certificate manually.
+This didn't work well, as python's `HTTPServer` isn't really made for that.
+
+So, now we just run this as HTTP and put it behind a `nginx` that does the HTTPS for us, and we host this web service on HTTP.
+
