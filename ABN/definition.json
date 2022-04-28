@@ -1,0 +1,84 @@
+{
+  "swagger": "2.0",
+  "x-ntx-render-version": 2,
+  "info": {
+    "description": "ABN lookup v0.3 - be able to get a ABN",
+    "version": "0.3",
+    "title": "ABN Lookup v0.3"
+  },
+  "host": "dev.prof-x.net",
+  "schemes": ["https"],
+  "paths": {
+    "/ABN/response1.json?abn={abn}": {
+      "get": {
+        "summary": "Get Item by ABN",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "abn",
+            "type": "integer",
+            "required": true,
+            "description": "The ABN to lookup..."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ABN response",
+            "schema": {
+              "$ref": "#/definitions/abnresponse"
+            }
+          }
+        }
+      }
+    },
+    "/ABN/responselist1.json?abn={abn}": {
+      "get": {
+        "summary": "Get List by ABN",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "path",
+            "name": "abn",
+            "type": "integer",
+            "required": true,
+            "description": "The ABN to lookup..."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "ABN response",
+            "schema": {
+              "$ref": "#/definitions/abnresponselist"
+            }
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "abnresponselist": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/abnresponse"
+      }
+    },
+    "abnresponse": {
+      "type": "object",
+      "properties": {
+        "Name": {
+          "type": "string"
+        },
+        "Department": {
+          "type": "string"
+        },
+        "BusinessName": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
