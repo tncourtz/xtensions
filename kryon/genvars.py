@@ -11,8 +11,9 @@ def RunMe(urlObject = None):
     if (urlObject != None):
         qs = parse_qs(urlObject.query)
     logging.debug(qs)
-    props["variable1"] = { "type": "string"}
-    props["variable2"] = { "type": "string"}
-    basicJson = {"stuff": { "$schema": "http://json-schema.org/draft-04/schema#"}, "type": "object", "properties": props }
+    
+    for var in qs['outputvariables'][0].split(','):
+        props[var] = { "type": "string"}
+    basicJson = {"stuff": { "$schema": "http://json-schema.org/draft-04/schema#", "type": "object", "properties": props} }
 
     return json.dumps(basicJson)

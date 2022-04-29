@@ -29,6 +29,12 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     def do_GET(self):
         # 192.168.1.1 - - [21/Apr/2021 10:22:45] "GET /favicon.ico HTTP/1.1" 200 -
         logging.debug("%s %s", self.client_address[0], self.requestline)
+
+        # Let's do a little bit of security :-)
+        if ".." in self.path:
+            self.send_error(404, "Yea, so we can't do files with double dots....")
+            return
+
         for header in self.headers:
             logging.info("HEADER %s:%s", header, self.headers[header])
 
@@ -40,11 +46,13 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         try:
             filetoread = url.path[1:]
             
+            # If we have .py file we load it as a module and execute it as a method.
+            # This allows us to create simple modules that can give dynamic responses.
             if url.path.endswith(".py"):
                 if os.path.exists(filetoread):
                     self.send_response(200)
-                    self.end_headers()
                     self.send_header('Content-type', 'application/json')
+                    self.end_headers()
                     py = self.load_module(Path(filetoread).stem, filetoread)
                     runresult = py.RunMe(url)
                     self.wfile.write(runresult.encode())
@@ -52,12 +60,13 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
                     logging.debug(f"file DOES NOT exists: {filetoread}")
                     self.send_error(404, f"File Not Found: {self.path}")
                     self.end_headers()
-            else:
+            else: # Must be anormal file?
                 if os.path.exists(self.path[1:]):
                     filetoread = self.path[1:]
 
                 if os.path.exists(filetoread):
                     self.send_response(200)
+                    # TODO: we should get mimetype from the OS based on extension of the file.
                     if url.path.endswith(".json"):
                         self.send_header('Content-type', 'application/json')
                     

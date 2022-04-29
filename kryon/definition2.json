@@ -1,0 +1,258 @@
+{
+  "swagger": "2.0",
+  "x-ntx-render-version": 2,
+  "info": {
+    "description": "Kryon Examples part 2",
+    "version": "0.1",
+    "title": "Kryon integration examples 2"
+  },
+  "host": "dev.prof-x.net",
+  "schemes": ["https"],
+  "paths": {
+    "/kryon/example1.json": {
+      "get": {
+        "summary": "Kryon option 1 - Minumum",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Automation",
+            "required": true,
+            "type": "string",
+            "enum": ["Automation 1", "Automation 2", "Automation 3", "Automation 4", "b. Automation 1", "b. Automation 2", "z. Automation 1"]
+          },
+          {
+            "in": "body",
+            "name": "Input variables",
+
+            "schema": {
+              "type": "array",
+              "items": {
+                "additionalProperties": false,
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "value": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Automation outcome"
+          }
+        }
+      }
+    },
+
+    "/kryon/example2.json": {
+      "get": {
+        "summary": "Kryon option 2",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "Automation",
+            "required": true,
+            "type": "string",
+            "enum": ["Automation 1", "Automation 2", "Automation 3", "Automation 4", "b. Automation 1", "b. Automation 2", "z. Automation 1"]
+          },
+          {
+            "name": "Variables",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Input variables": {
+                  "type": "array",
+                  "items": {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "OutputVariables",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Automation outcome",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "x-ntx-dynamic-schema": {
+                "operationId": "KryonDynResponse",
+                "value-path": "stuff",
+                "parameters": {
+                  "outputvariables": {
+                    "parameter": "OutputVariables"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kryon/example3.json": {
+      "get": {
+        "summary": "Kryon option 3",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "automation",
+            "required": true,
+            "type": "string",
+            "x-ntx-summary": "Automation",
+            "minLength": 1,
+            "x-ntx-control": "path-picker",
+            "x-ntx-dynamic-values": {
+              "operationId": "KryonAutomationsResponse",
+              "parameters": {
+                "currentPath": {
+                  "parameter": "automation"
+                }
+              },
+              "value-path": "path",
+              "value-title": "name"
+            }
+          },
+          {
+            "name": "Variables",
+            "in": "body",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "Input variables": {
+                  "type": "array",
+                  "items": {
+                    "additionalProperties": false,
+                    "type": "object",
+                    "properties": {
+                      "name": {
+                        "type": "string"
+                      },
+                      "value": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          {
+            "in": "query",
+            "name": "OutputVariables",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Automation outcome",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "x-ntx-dynamic-schema": {
+                "operationId": "KryonDynResponse",
+                "value-path": "stuff",
+                "parameters": {
+                  "outputvariables": {
+                    "parameter": "OutputVariables"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/kryon/genvars.py": {
+      "get": {
+        "operationId": "KryonDynResponse",
+        "summary": "Internal 1 - vars",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "outputvariables",
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "No need to define this, it's json schema."
+          }
+        }
+      }
+    },
+    "/kryon/getautomations.py": {
+      "get": {
+        "operationId": "KryonAutomationsResponse",
+        "summary": "Internal 2 - automations",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "currentPath",
+            "type": "string",
+            "default": "/"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "title": "ItemName",
+                    "type": "string"
+                  },
+                  "path": {
+                    "title": "ItemPath",
+                    "type": "string"
+                  },
+                  "type": {
+                    "title": "ItemType",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
