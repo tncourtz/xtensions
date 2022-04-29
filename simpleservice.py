@@ -1,10 +1,14 @@
 from http.server import HTTPServer, BaseHTTPRequestHandler
+
 from io import BytesIO
 from datetime import datetime,timezone
 import os
 import logging
-import time
+import sys
 from urllib.parse import urlparse,parse_qs
+from pathlib import Path
+import importlib.util
+
 
 # Simple HTTP(s) web service to host files and be able to do simple request/response changes.
 # Inspired by: https://blog.anvileight.com/posts/simple-python-http-server/
@@ -14,6 +18,13 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
     # supress all standard logging.
     def log_message(self, format, *args):
         return
+
+    def load_module(self, name, path):
+        spec = importlib.util.spec_from_file_location(name, path)
+        module = importlib.util.module_from_spec(spec)
+        spec.loader.exec_module(module)
+        return module
+
 
     def do_GET(self):
         # 192.168.1.1 - - [21/Apr/2021 10:22:45] "GET /favicon.ico HTTP/1.1" 200 -
@@ -29,31 +40,38 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
         try:
             filetoread = url.path[1:]
             
-            if os.path.exists(self.path[1:]):
-                filetoread = self.path[1:]
-
-            if os.path.exists(filetoread):
-                self.send_response(200)
-                if url.path.endswith(".json"):
+            if url.path.endswith(".py"):
+                if os.path.exists(filetoread):
+                    self.send_response(200)
+                    self.end_headers()
                     self.send_header('Content-type', 'application/json')
-                
-                self.end_headers()
-                f = open(filetoread, 'rb')
-                self.wfile.write(f.read())
-                f.close()
-                return
+                    py = self.load_module(Path(filetoread).stem, filetoread)
+                    runresult = py.RunMe(url)
+                    self.wfile.write(runresult.encode())
+                else:
+                    logging.debug(f"file DOES NOT exists: {filetoread}")
+                    self.send_error(404, f"File Not Found: {self.path}")
+                    self.end_headers()
             else:
-                logging.debug(f"file DOES NOT exists: {filetoread}")
-                self.send_error(404, f"File Not Found: {self.path}")
-                self.end_headers()
-                return
+                if os.path.exists(self.path[1:]):
+                    filetoread = self.path[1:]
 
+                if os.path.exists(filetoread):
+                    self.send_response(200)
+                    if url.path.endswith(".json"):
+                        self.send_header('Content-type', 'application/json')
+                    
+                    self.end_headers()
+                    f = open(filetoread, 'rb')
+                    self.wfile.write(f.read())
+                    f.close()
+                else:
+                    logging.debug(f"file DOES NOT exists: {filetoread}")
+                    self.send_error(404, f"File Not Found: {self.path}")
+                    self.end_headers()
         except BaseException as err:
-            logging.debug(err)
+            logging.error(err)
             self.send_error(500, f"Unexpected {err=}, {type(err)=}")
-            return
-
-        
 
     def do_POST(self):
         logging.debug("%s %s", self.client_address[0], self.requestline)
