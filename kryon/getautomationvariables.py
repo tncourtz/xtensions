@@ -31,6 +31,54 @@ def RunMe(urlObject = None):
         },
         {
             "variablename": "MyOutputValue",
+        }   , 
+        {
+            "variablename": "MyOutputValue1",
+        }    ,
+        {
+            "variablename": "MyOutputValue2",
+        }    ,
+        {
+            "variablename": "MyOutputValue3",
+        }    ,
+        {
+            "variablename": "MyOutputValue3",
+        }    ,
+        {
+            "variablename": "MyOutputValue4",
+        }    ,
+        {
+            "variablename": "MyOutputValue5",
+        }    ,
+        {
+            "variablename": "MyOutputValue6",
+        }    ,
+        {
+            "variablename": "MyOutputValue7",
+        }    ,
+        {
+            "variablename": "MyOutputValue8",
+        }    ,
+        {
+            "variablename": "MyOutputValue9",
+        }    ,
+        {
+            "variablename": "MyOutputValue10",
+        }    ,
+        {
+            "variablename": "MyOutputValue11",
+        }    ,
+        {
+            "variablename": "MyOutputValue12",
+        }    ,
+        {
+            "variablename": "MyOutputValue13",
+        }    ,
+        {
+            "variablename": "MyOutputValue14",
+        }    ,
+        {
+            "variablename": "MyOutputValue15",
         }    
     ]
 
