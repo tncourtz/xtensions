@@ -1,5 +1,6 @@
 from urllib.parse import parse_qs
 import json
+import os
 import logging
 
 
@@ -8,77 +9,67 @@ def RunMe(urlObject = None):
     
     if (urlObject != None):
         qs = parse_qs(urlObject.query)
+    logging.debug("INPUT:")
     logging.debug(qs)
     
-    root = [
-        {
-            "path": "/Folder 1",
-            "name": "Folder 1",
-            "type": "folder"
-        },
-        {
-            "path": "/Folder 2",
-            "name": "Folder 2",
-            "type": "folder"
-        },
-        {
-            "path": "/Folder 3",
-            "name": "Folder 3",
-            "type": "folder"
-        },
-        {
-            "path": "/My First Automation",
-            "name": "My First Automation",
-            "type": "file"
-        }
-    ]
-
-    folder1 = [
-        {
-            "path": "/Folder 1/Folder 1",
-            "name": "Folder 1.1",
-            "type": "folder"
-        },
-              {
-            "path": "/Folder 1/Folder 2",
-            "name": "Folder 1.2",
-            "type": "folder"
-        },
-        {
-            "path": "/Folder 1/My second Automation",
-            "name": "My second Automation",
-            "type": "file"
-        }
-       
-    ]
-
-
-    folder2 = [
-        {
-            "path": "/Folder 2/Folder 1",
-            "name": "Folder 2.1",
-            "type": "folder"
-        },
-              {
-            "path": "/Folder 2/Folder 2",
-            "name": "Folder 2.2",
-            "type": "folder"
-        },
-        {
-            "path": "/Folder 2/2.2. My 3rd Automation",
-            "name": "2.2. My 3rd Automation",
-            "type": "file"
-        }
-       
-    ]
-
+    splitted=[""]
 
     if "currentPath" in qs:
-        if qs["currentPath"][0] == "/Folder 1":
-            return json.dumps(folder1)
-        if qs["currentPath"][0] == "/Folder 2":
-            return json.dumps(folder2)
+        splitted = list(filter(None, qs["currentPath"][0].split("/")))
 
-    return json.dumps(root)
+    base = os.path.join("kryon", "automationvariables")
+
+    if os.path.isdir(base):
+        return json.dumps(findEnd(base, splitted, 0))
+    else:
+        return json.dumps({"failed", True })
     
+        
+
+
+
     
+
+def findEnd(base, pathbits, depth):
+    logging.debug(f"findEnd({base},{pathbits},{depth}")
+    logging.debug(f"Len: {len(pathbits)} - {depth}")
+    if len(pathbits) == 0:
+        return listDir(base)
+    else:
+        oneup = os.path.join(base, pathbits[depth])
+    logging.debug(f"OneUp: {oneup}")
+    if os.path.isdir(oneup):
+        if depth == len(pathbits)-1:
+            logging.debug("List the directory")
+            dirlist = listDir(oneup)
+            return dirlist
+        else:
+            depth = depth + 1
+            return findEnd(oneup, pathbits, depth)
+    if os.path.isfile(oneup):
+        return json.dumps({"file", True})
+
+
+def listDir(path):
+    items = []
+    if os.path.exists(path):
+        for item in os.listdir(path):
+            itempath = os.path.join(path, item)
+            if os.path.isfile(itempath):
+                obj = {
+                    "path": itempath[len("kryon/automationvariables"):-4],
+                    "name": item[0:-4],
+                    "type": "file"
+                }
+                items.append(obj)
+            elif os.path.isdir(itempath):
+                obj = {
+                    "path": itempath[len("kryon/automationvariables"):],
+                    "name": item,
+                    "type": "folder"
+                }
+                items.append(obj)
+    logging.debug(items)
+    return items
+
+

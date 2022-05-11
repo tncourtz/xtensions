@@ -1,5 +1,6 @@
 from urllib.parse import parse_qs
 import json
+import os
 import logging
 
 
@@ -10,33 +11,40 @@ def RunMe(urlObject = None):
 
     if (urlObject != None):
         qs = parse_qs(urlObject.query)
+    logging.debug("INPUT:")
     logging.debug(qs)
-    
-    automation1props = {}
-    automation2props = {}
-    for var in ["ExcelFileLocation", "InputCell1", "MyOutputValue"]:
-        automation1props[var] = { "type": "string" }
-    for var in ["ExcelHTTPLocation", "SomeOthercell", "MyOutputValue"]:
-        automation2props[var] = { "type": "string" }
 
-    automation1 = {
-        "stuff": { 
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "type": "object",
-                "properties": automation1props,
-                "required": ["ExcelFileLocation"] 
-            }
-        }
-    automation2 = {
-        "stuff": { 
-                "$schema": "http://json-schema.org/draft-04/schema#",
-                "type": "object",
-                "properties": automation2props,
-                "required": ["ExcelHTTPLocation", "SomeOtherCell" ]
-            }
-        }
+
+
+    # Some default props we always want to have
+    props = {}
+    for var in ["ExcelFileLocation", "InputCell1", "MyOutputValue"]:
+        props[var] = { "type": "string" }
+ 
+
+    
 
     if "automation" in qs and qs["automation"][0]:
-        return json.dumps(automation2)
+        autoname = qs["automation"][0]
+        autovarfile = "kryon/automationvariables/" + autoname + ".txt"
+        logging.debug(f"Trying to get file for automation {autoname} in {autovarfile}")
+        if os.path.exists(autovarfile):
+            with open(autovarfile) as f:
+                variables = f.readlines()
+                props = {}
+                for line in variables:
+                    line = line.strip()
+                    props[line] = { "type": "string"}
+        else:
+            logging.debug(f"File {autovarfile} not found.")
 
-    return json.dumps(automation1)
+    defaultautomation = {
+        "stuff": { 
+            "$schema": "http://json-schema.org/draft-04/schema#",
+            "type": "object",
+            "properties": props,
+        }
+    }
+
+
+    return json.dumps(defaultautomation)

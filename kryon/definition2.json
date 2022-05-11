@@ -19,7 +19,15 @@
             "name": "Automation",
             "required": true,
             "type": "string",
-            "enum": ["Automation 1", "Automation 2", "Automation 3", "Automation 4", "b. Automation 1", "b. Automation 2", "z. Automation 1"]
+            "enum": [
+              "Automation 1",
+              "Automation 2",
+              "Automation 3",
+              "Automation 4",
+              "b. Automation 1",
+              "b. Automation 2",
+              "z. Automation 1"
+            ]
           },
           {
             "in": "body",
@@ -60,7 +68,15 @@
             "name": "Automation",
             "required": true,
             "type": "string",
-            "enum": ["Automation 1", "Automation 2", "Automation 3", "Automation 4", "b. Automation 1", "b. Automation 2", "z. Automation 1"]
+            "enum": [
+              "Automation 1",
+              "Automation 2",
+              "Automation 3",
+              "Automation 4",
+              "b. Automation 1",
+              "b. Automation 2",
+              "z. Automation 1"
+            ]
           },
           {
             "name": "Variables",
@@ -277,10 +293,106 @@
         }
       }
     },
+    "/kryon/example5.json": {
+      "get": {
+        "summary": "Kryon option 5 - queue",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "automation",
+            "required": true,
+            "type": "string",
+            "x-ntx-summary": "Automation",
+            "minLength": 1,
+            "x-ntx-control": "path-picker",
+            "x-ntx-dynamic-values": {
+              "operationId": "KryonAutomationsResponse",
+              "parameters": {
+                "currentPath": {
+                  "parameter": "automation"
+                }
+              },
+              "value-path": "path",
+              "value-title": "name"
+            }
+          },
+          {
+            "in": "query",
+            "name": "queue",
+            "required": true,
+            "type": "string",
+            "x-ntx-summary": "Queue",
+            "minLength": 1,
+            "x-ntx-dynamic-values": {
+              "operationId": "KryonQueue",
+              "value-path": "QueueId",
+              "value-title": "QueueName"
+            }
+          },
+
+          {
+            "name": "fields",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "x-ntx-dynamic-schema": {
+                "operationId": "KryonAutomationVariablesSchema",
+                "parameters": {
+                  "automation": {
+                    "parameter": "automation"
+                  }
+                },
+                "value-path": "stuff"
+              }
+            },
+            "x-ntx-summary": "Input variables"
+          },
+          {
+            "in": "query",
+            "name": "OutputVariables",
+            "type": "array",
+            "items": {
+              "type": "string",
+              "x-ntx-dynamic-values": {
+                "operationId": "KryonAutomationVariables",
+                "value-path": "variablename",
+                "value-title": "variablename",
+                "parameters": {
+                  "automation": {
+                    "parameter": "automation"
+                  }
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Automation outcome",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "x-ntx-dynamic-schema": {
+                "operationId": "KryonDynamicVariablesOutcome",
+                "value-path": "stuff",
+                "parameters": {
+                  "outputvariables": {
+                    "parameter": "OutputVariables"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/kryon/genautomationvariables.py": {
       "get": {
+        "x-ntx-visible": "internal",
         "operationId": "KryonAutomationVariablesSchema",
-        "summary": "Internal 4 - Generate automation variables (Schema)",
+        "summary": "Internal 4 - Retrieve schema that represents the variable inputs",
         "produces": ["application/json"],
         "parameters": [
           {
@@ -299,6 +411,7 @@
 
     "/kryon/genvars.py": {
       "get": {
+        "x-ntx-visible": "internal",
         "operationId": "KryonDynamicVariablesOutcome",
         "summary": "Internal 1 - Generate Respone Vars (schema)",
         "produces": ["application/json"],
@@ -321,6 +434,7 @@
     },
     "/kryon/getautomationvariables.py": {
       "get": {
+        "x-ntx-visible": "internal",
         "operationId": "KryonAutomationVariables",
         "summary": "Internal 3 -  Automation variables",
         "produces": ["application/json"],
@@ -338,9 +452,43 @@
         }
       }
     },
+    "/kryon/getqueues.json": {
+      "get": {
+        "x-ntx-visible": "internal",
+        "operationId": "KryonQueue",
+        "summary": "Internal - Get Queues",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "QueueId": {
+                    "title": "Queue Id",
+                    "type": "integer"
+                  },
+                  "QueueName": {
+                    "title": "Queue Name",
+                    "type": "string"
+                  },
+                  "BotsAttached": {
+                    "title": "Bots Attached",
+                    "type": "integer"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
 
     "/kryon/getautomations.py": {
       "get": {
+        "x-ntx-visible": "hidden",
         "operationId": "KryonAutomationsResponse",
         "summary": "Internal 2 - automations",
         "produces": ["application/json"],
