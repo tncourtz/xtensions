@@ -1,0 +1,17 @@
+[
+  {
+    "QueueName": "Queue 1",
+    "QueueId": 1,
+    "BotsAttached": 6
+  },
+  {
+    "QueueName": "Queue 2",
+    "QueueId": 2,
+    "BotsAttached": 3
+  },
+  {
+    "QueueName": "Queue 3",
+    "QueueId": 3,
+    "BotsAttached": 4
+  }
+]
