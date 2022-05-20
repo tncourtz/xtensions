@@ -1,0 +1,129 @@
+{
+  "swagger": "2.0",
+  "x-ntx-render-version": 2,
+  "info": {
+    "description": "DataSource SlowNess issue",
+    "version": "0.1",
+    "title": "Simple Service 1"
+  },
+  "host": "dev.prof-x.net",
+  "schemes": ["https"],
+  "paths": {
+    "/DataSourceBug/response1.json": {
+      "post": {
+        "operationId": "Test1",
+        "summary": "Call Simple Service - fast",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Input",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "x-ntx-dynamic-schema": {
+                "operationId": "GetInputSchemaFast",
+                "value-path": "stuff"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "x-ntx-dynamic-schema": {
+                "operationId": "GetOutputFast",
+                "value-path": "stuff"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/DataSourceBug/response1.slow.json": {
+      "post": {
+        "operationId": "Test2",
+        "summary": "Call Simple Service - slow",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Input",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "x-ntx-dynamic-schema": {
+                "operationId": "GetInputSchemaSlow",
+                "value-path": "stuff"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Response",
+            "schema": {
+              "type": "object",
+              "additionalProperties": false,
+              "x-ntx-dynamic-schema": {
+                "operationId": "GetOutputSlow",
+                "value-path": "stuff"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/DataSourceBug/response1schema.json": {
+      "get": {
+        "operationId": "GetOutputFast",
+        "x-ntx-visibility": "internal",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "no need to define"
+          }
+        }
+      }
+    },
+    "/DataSourceBug/response1schema.slow.json": {
+      "get": {
+        "operationId": "GetOutputSlow",
+        "x-ntx-visibility": "internal",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "no need to define"
+          }
+        }
+      }
+    },
+    "/DataSourceBug/input1schema.json": {
+      "get": {
+        "operationId": "GetInputSchemaFast",
+        "x-ntx-visibility": "internal",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "no need to define"
+          }
+        }
+      }
+    },
+    "/DataSourceBug/input1schema.slow.json": {
+      "get": {
+        "operationId": "GetInputSchemaSlow",
+        "x-ntx-visibility": "internal",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "no need to define"
+          }
+        }
+      }
+    }
+  }
+}
