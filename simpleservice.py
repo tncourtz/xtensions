@@ -4,7 +4,7 @@ from io import BytesIO
 from datetime import datetime,timezone
 import os
 import logging
-import sys
+import time
 from urllib.parse import urlparse,parse_qs
 from pathlib import Path
 import importlib.util
@@ -45,6 +45,9 @@ class SimpleHTTPRequestHandler(BaseHTTPRequestHandler):
 
         try:
             filetoread = url.path[1:]
+
+            if url.path.endswith(".slow.json") or url.path.endswith(".slow.py"):
+                time.sleep(5)
             
             # If we have .py file we load it as a module and execute it as a method.
             # This allows us to create simple modules that can give dynamic responses.
