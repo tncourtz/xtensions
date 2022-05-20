@@ -3,12 +3,72 @@
     "$schema": "http://json-schema.org/draft-04/schema#",
 
     "type": "object",
+    "required": ["Other", "Other2", "Other3", "Deep1"],
     "properties": {
       "Name": {
         "type": "string"
       },
       "Description": {
         "type": "string"
+      },
+      "Other": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "SomeOtherItem1": { "type": "string" },
+            "SomeOtherItem2": { "type": "string" },
+            "SomeOtherItem3": { "type": "string" },
+            "SomeOtherItem4": { "type": "string" },
+            "SomeOtherItem5": { "type": "string" }
+          }
+        }
+      },
+      "Other2": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "SomeOtherItem1": { "type": "string" },
+            "SomeOtherItem2": { "type": "string" },
+            "SomeOtherItem3": { "type": "string" },
+            "SomeOtherItem4": { "type": "string" },
+            "SomeOtherItem5": { "type": "string" }
+          }
+        }
+      },
+      "Other3": {
+        "type": "array",
+        "items": {
+          "type": "object",
+          "properties": {
+            "SomeOtherItem1": { "type": "string" },
+            "SomeOtherItem2": { "type": "string" },
+            "SomeOtherItem3": { "type": "string" },
+            "SomeOtherItem4": { "type": "string" },
+            "SomeOtherItem5": { "type": "string" }
+          }
+        }
+      },
+      "Deep1": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "Deep2": {
+            "type": "object",
+            "required": ["Deep2"],
+            "properties": {
+              "name": {
+                "type": "string"
+              },
+              "Deep2": {
+                "type": "string"
+              }
+            }
+          }
+        }
       }
     }
   }
