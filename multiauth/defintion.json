@@ -101,7 +101,7 @@
         }
       }
     },
-    "/multiauth/response1.json?input={input}&1=4": {
+    "/multiauth/response1.json?input={input}&1=4&input2={input2}": {
       "get": {
         "summary": "Get Item 4 - No Auth",
         "produces": ["application/json"],
@@ -113,6 +113,14 @@
             "default": 1,
             "required": true,
             "description": "Some input field"
+          },
+          {
+            "in": "path",
+            "name": "input2",
+            "type": "integer",
+            "default": 1,
+            "required": true,
+            "description": "Some input2 field"
           }
         ],
         "responses": {
