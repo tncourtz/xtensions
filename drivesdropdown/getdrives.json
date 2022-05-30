@@ -1,0 +1,54 @@
+{
+  "stuff": {
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "type": "object",
+    "required": ["Drive"],
+    "properties": {
+      "Drive": {
+        "type": "string",
+        "x-ntx-options": [
+          {
+            "options": [
+              {
+                "label": "My Drive",
+                "value": "mydrive"
+              }
+            ]
+          },
+          {
+            "label": "Shared Drives",
+            "options": [
+              {
+                "value": "shareddrive1",
+                "label": "A shared drive",
+                "category": "Shared Drives"
+              },
+              {
+                "value": "shareddrive2",
+                "label": "Another shared drive",
+                "category": "Shared Drives"
+              }
+            ]
+          }
+        ],
+
+        "enum": [
+          {
+            "label": "My Drive",
+            "value": "mydrive"
+          },
+          {
+            "label": "A shared drive",
+            "value": "shareddrive1",
+            "category": "Shared Drives"
+          },
+          {
+            "label": "Another shared drive",
+            "value": "shareddrive2",
+            "category": "Shared Drives"
+          }
+        ]
+      }
+    }
+  }
+}

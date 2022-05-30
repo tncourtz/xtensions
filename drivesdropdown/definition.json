@@ -1,0 +1,52 @@
+{
+  "swagger": "2.0",
+  "x-ntx-render-version": 2,
+  "info": {
+    "description": "Google Drives Example",
+    "version": "0.1",
+    "title": "Get my google drives"
+  },
+  "host": "dev.prof-x.net",
+  "schemes": ["https"],
+  "paths": {
+    "/drivesdropdown/example1.json": {
+      "get": {
+        "summary": "Google Drive Test - Simple call",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "Drive",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "x-ntx-dynamic-schema": {
+                "operationId": "GoogleDriveSchema",
+                "value-path": "stuff"
+              }
+            },
+            "x-ntx-summary": "Drive"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Automation outcome"
+          }
+        }
+      }
+    },
+    "/drivesdropdown/getdrives.json": {
+      "get": {
+        "summary": "Google Drive Test - Get Drives Schema",
+        "operationId": "GoogleDriveSchema",
+        "x-ntx-visibility": "internal",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "No Need for this."
+          }
+        }
+      }
+    }
+  }
+}
