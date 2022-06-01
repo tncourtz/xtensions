@@ -11,7 +11,7 @@
   "paths": {
     "/drivesdropdown/example1.json": {
       "get": {
-        "summary": "Google Drive Test - Simple call",
+        "summary": "Google Drive Test - Simple call - drive",
         "produces": ["application/json"],
         "parameters": [
           {
