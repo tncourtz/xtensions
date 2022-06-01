@@ -1,0 +1,12 @@
+[
+  {
+    "ConnectorName": "Randommer",
+    "AppId": "1d7a4233-f974-4680-b173-af25c371bc6a",
+    "ConnectionDetails": { "connectionDisplayName": "Randommer 1", "apiKey": "TEST" }
+  },
+  {
+    "ConnectorName": "Randommer",
+    "AppId": "1d7a4233-f974-4680-b173-af25c371bc6a",
+    "ConnectionDetails": { "connectionDisplayName": "Randommer 2", "apiKey": "TEST" }
+  }
+]
