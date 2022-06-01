@@ -33,9 +33,8 @@ def main():
         for con in allConnections:
             print (con)
             displayname = con["displayName"]
-            print(f"Deleting {displayname}")
             deleteURL = urljoin(apimURL, "/designer_/api/connections/", con["id"])
-            requests.delete(deleteURL, headers=header)
+# NOT TESTED             requests.delete(deleteURL, headers=header)
 
 
 
