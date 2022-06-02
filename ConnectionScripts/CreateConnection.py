@@ -6,14 +6,30 @@ import logging
 from urllib.parse import urljoin
 
 
-apimURL = "https://us.nintextest.io"
+
+apiManagerURL = "https://us.nintextest.io"
+tenantURL = "https://ntx-xtn.workflowcloud-test.com"
+
 
 
 def getAccessToken():
-    with open("apimanager.token.json") as file:
-        data = json.load(file)
+    sessionCookie=None
+    with open("sessioncookie.json") as cookiefile:
+        sessionCookie=json.load(cookiefile)
 
-    return data["access_token"]
+    if sessionCookie is None:
+        raise Exception("Couldn't read sessioncookie from file.")
+
+    genTokenURL = urljoin(tenantURL, "/api/apimanager/token")
+    tokenResponse = requests.get(genTokenURL, cookies=sessionCookie)
+
+    if tokenResponse.status_code == 200:
+        tokenJson = json.loads(tokenResponse.text)
+        return tokenJson["access_token"]
+
+    raise Exception(f"Failed to retrieve token from {genTokenURL}")
+
+
 
 def getConnections():
     with open("connectionlist.json") as file:
@@ -37,7 +53,7 @@ def main():
 
         for con in connections:
 
-            createurl = urljoin(apimURL,f'/connection/api/v1/connections?appId={con["AppId"]}')
+            createurl = urljoin(apiManagerURL,f'/connection/api/v1/connections?appId={con["AppId"]}')
             print(con["ConnectionDetails"])
             res = requests.post(createurl, json = con["ConnectionDetails"], headers=headers)
             print(res.text)

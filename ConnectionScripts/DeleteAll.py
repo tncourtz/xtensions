@@ -4,15 +4,26 @@ import logging
 from urllib.parse import urljoin
 
 
-apimURL = "https://eu.nintex.io"
+apiManagerURL = "https://us.nintextest.io"
+tenantURL = "https://ntx-xtn.workflowcloud-test.com"
 
 
 def getAccessToken():
-    with open("apimanager.token.json") as file:
-        data = json.load(file)
+    sessionCookie=None
+    with open("sessioncookie.json") as cookiefile:
+        sessionCookie=json.load(cookiefile)
 
-    return data["access_token"]
+    if sessionCookie is None:
+        raise Exception("Couldn't read sessioncookie from file.")
 
+    genTokenURL = urljoin(tenantURL, "/generate-token")
+    tokenResponse = requests.get(genTokenURL, cookies=sessionCookie)
+
+    if tokenResponse.status_code == 200:
+        tokenJson = json.loads(tokenResponse.text)
+        return tokenJson["token"]
+
+    raise Exception(f"Failed to retrieve token from {genTokenURL}")
 
 
 def main():
@@ -25,7 +36,7 @@ def main():
     try:
     
         token = getAccessToken()
-        connectionsURL = urljoin(apimURL, "/designer_/api/connection/api/connections")
+        connectionsURL = urljoin(apiManagerURL, "/designer_/api/connection/api/connections")
         headers={"authorization": "Bearer "+token}
         cons = requests.get(connectionsURL, headers=headers)
 
@@ -33,7 +44,7 @@ def main():
         for con in allConnections:
             print (con)
             displayname = con["displayName"]
-            deleteURL = urljoin(apimURL, "/designer_/api/connections/", con["id"])
+            deleteURL = urljoin(apiManagerURL, "/designer_/api/connections/", con["id"])
 # NOT TESTED             requests.delete(deleteURL, headers=header)
 
 
