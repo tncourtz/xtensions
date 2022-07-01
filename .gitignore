@@ -3,6 +3,7 @@ dumps/
 bin/
 lib64
 ConnectionScripts/sessioncookie.json
+googleevents/ClientDetailsApp.json
 
 
 
