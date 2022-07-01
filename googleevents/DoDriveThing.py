@@ -1,4 +1,3 @@
-from urllib import response
 import requests
 import json
 from random import random
