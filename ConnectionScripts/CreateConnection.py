@@ -36,7 +36,8 @@ def getConnections():
         data = json.load(file)
     return data
 
-
+# TODO:
+# - Understand what type of authentication the specific connector is. Once known, take actions on how to appraoch it (ask for PW, give redirect URL)
 
 def main():
     logging.basicConfig(
