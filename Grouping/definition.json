@@ -1,0 +1,55 @@
+{
+  "swagger": "2.0",
+  "x-ntx-render-version": 2,
+  "info": {
+    "description": "x-ntx-groups example 2",
+    "version": "0.1",
+    "title": "x-ntx-groups example 2"
+  },
+  "host": "dev.prof-x.net",
+  "schemes": ["https"],
+  "paths": {
+    "/Grouping/example1.json": {
+      "get": {
+        "summary": "Grouping example",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "name": "MyProperties",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "type": "object",
+              "x-ntx-groups": [
+                {
+                  "properties": ["MyProperty1", "MyProperty2"],
+                  "heading": "My Properties",
+                  "x-ntx-control": "card"
+                }
+              ],
+              "properties": {
+                "MyProperty0": {
+                  "type": "string"
+                },
+                "MyProperty1": {
+                  "type": "string"
+                },
+                "MyProperty2": {
+                  "type": "string"
+                },
+                "MyProperty3": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Automation outcome"
+          }
+        }
+      }
+    }
+  }
+}
