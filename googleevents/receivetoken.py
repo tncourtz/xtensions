@@ -7,8 +7,6 @@ import logging
 
 def RunMe(urlObject = None):
     
-    
-
     if (urlObject != None):
         qs = parse_qs(urlObject.query)
     logging.debug("INPUT:")
@@ -30,6 +28,9 @@ def RunMe(urlObject = None):
             }
 
         response = requests.post("https://oauth2.googleapis.com/token", data=requestData)
+        f = open("./googleevents/refresh_token.json", "wb")
+        f.write(response.content)
+        f.close()
         f = open("./googleevents/accesstoken.json", "wb")
         f.write(response.content)
         f.close()
