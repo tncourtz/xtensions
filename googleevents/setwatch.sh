@@ -3,29 +3,26 @@
 ACCESS=`jq -r '.access_token' accesstoken.json `
 
 NOW=`date +%s`
-EXP=`expr ${NOW} + 3600`
+EXP=`expr ${NOW} + 600`
 EXP=`expr ${EXP} '*' 1000`
 
 SETWATCH=$( jq -n \
 	--arg exp "$EXP" \
 	'{
-		"id": "5",
+		"kind": "api#channel",
+		"id": "FFFFF-cf8f-4798-961b-10a0b73af2BB",
 		"type": "web_hook",
-		"token": "MyWatchToken=1",
+		"token": "myId=1&Folder=test",
+		"expiration": $exp,
 		"address": "https://dev.prof-x.net/googleappnotification/",
-		"expiration": $exp
+		"payload": true
 	}'
 	)
 
 echo $SETWATCH > postdata.txt
 
 
-## This sets a watch on a file/folder. You then *ONLY* get updates to that item. if it's a folder, a new file created does NOT raise an event.
-# curl -d @postdata.txt -H "Authorization: Bearer ${ACCESS}" -H 'Content-Type: application/json' "https://www.googleapis.com/drive/v3/files/1UVYmCDXFHeoEqJhmJ5heQUMaVHCPEUaO/watch?fields=id,kind&supportsAllDrives=true"  > setwatchresponse.json
 
-
-## Stop it..
-# curl -d '{ "id": "5", "resourceId": "-9hsprrBSp6LKyijAJftwc713dU"}' -H "Authorization: Bearer ${ACCESS}" -H 'Content-Type: application/json' "https://www.googleapis.com/drive/v3/channels/stop"
 
 
 
@@ -33,4 +30,14 @@ echo $SETWATCH > postdata.txt
 ## This adds a channel watch, which gets you lots of info...
 curl -H "Authorization: Bearer ${ACCESS}" "https://www.googleapis.com/drive/v3/changes/startPageToken?supportsAllDrives=true" > startpagetokenresponse.json
 PAGETOKEN=`cat startpagetokenresponse.json  | jq -r '.startPageToken'`
-curl -d @postdata.txt -H "Authorization: Bearer ${ACCESS}" -H 'Content-Type: application/json' "https://www.googleapis.com/drive/v3/changes/watch?fields=id,kind&supportsAllDrives=true&pageToken=${PAGETOKEN}"  > setwatchresponse.json
+
+## All changes
+curl -d @postdata.txt -H "Authorization: Bearer ${ACCESS}" -H 'Content-Type: application/json' "https://www.googleapis.com/drive/v3/changes/watch?fields=*&driveId=0APzXdF6L45tIUk9PVA&includeItemsFromAllDrives=true&supportsAllDrives=true&pageToken=1"  > setwatchresponse.json
+
+
+## Specific object changes.- this only works correclty on MyDrive items - https://issuetracker.google.com/issues/130736018
+# curl -d @postdata.txt -H "Authorization: Bearer ${ACCESS}" -H 'Content-Type: application/json' "https://www.googleapis.com/drive/v3/files/1lY3D3oN4ItpZGtOgF1vhQ8FDadDDlBQi/watch?fields=*"  > setwatchresponse.json
+
+
+## Stopping it can be done as such.
+# curl -d '{ "id": "FFFFF-cf8f-4798-961b-10a0b73af2BB", "resourceId": "w4RzAbNsy46h7Y02dHwxjTBPTJU"}' -H "Authorization: Bearer ${ACCESS}" -H 'Content-Type: application/json' "https://www.googleapis.com/drive/v3/channels/stop"

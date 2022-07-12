@@ -23,5 +23,7 @@ if [ $PAGETOKEN == 0 ]; then
     exit
 fi
 
-curl -H "Authorization: Bearer ${ACCESS}" -H 'Content-Type: application/json' "https://www.googleapis.com/drive/v3/changes?includeItemsFromAllDrives=true&supportsAllDrives=true&pageToken=${PAGETOKEN}&fields=*" > getchangesresponse.json
+curl -H "Authorization: Bearer ${ACCESS}" \
+     -H 'Content-Type: application/json' \
+     "https://www.googleapis.com/drive/v3/changes?driveId=0APzXdF6L45tIUk9PVA&includeItemsFromAllDrives=true&supportsAllDrives=true&pageToken=${PAGETOKEN}&fields=*" > getchangesresponse.json
 
