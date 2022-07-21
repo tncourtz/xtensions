@@ -1,0 +1,87 @@
+{
+  "swagger": "2.0",
+  "x-ntx-render-version": 2,
+  "info": {
+    "description": "PathPicker Issue",
+    "version": "0.1",
+    "title": "RDA Path Picker Issue"
+  },
+  "host": "dev.prof-x.net",
+  "schemes": ["https"],
+  "paths": {
+    "/PathPicker/response.json": {
+      "get": {
+        "summary": "Path Picker Example",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "path",
+            "x-ntx-summary": "Select path",
+            "schema": {
+              "type": "string",
+              "x-ntx-control": "path-picker",
+              "x-ntx-dynamic-values": {
+                "operationId": "pathpickeroutput",
+                "parameters": {
+                  "currentitem": {
+                    "parameter": "path"
+                  }
+                },
+                "value-path": "value",
+                "value-title": "name"
+              }
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Automation outcome"
+          }
+        }
+      }
+    },
+
+    "/PathPicker/dummyoutput.py": {
+      "get": {
+        "x-ntx-visible": "hidden",
+        "operationId": "pathpickeroutput",
+        "summary": "Internal - pathpickeroutput",
+        "produces": ["application/json"],
+        "parameters": [
+          {
+            "in": "query",
+            "name": "currentitem",
+            "type": "string",
+            "default": "/"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "title": "ItemName",
+                    "type": "string"
+                  },
+                  "path": {
+                    "title": "ItemPath",
+                    "type": "string"
+                  },
+                  "type": {
+                    "title": "ItemType",
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
