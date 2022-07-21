@@ -23,10 +23,11 @@ def RunMe(urlObject = None):
         if currentitem == "/1":
             retval =  [
                 { "path": "/First/myfile.txt", "name": "myfile.txt", "value": "/1/1", "type": "file" },
-                { "path": "/First/mything.txt", "name": "mything.txt", "value": "/1/2", "type": "file" },
+                { "path": "/First/myfile.txt", "name": "myfile.txt", "value": "/1/3", "type": "file" },
+                { "path": "/First/MySecondFolder", "name": "MySecondFolder", "value": "/1/2", "type": "folder" },
             ]
         elif currentitem == "/2":
-                    retval =  [
+            retval =  [
                 { "path": "/Second/myfile.txt", "name": "myfile.txt", "value": "/2/1", "type": "file" },
                 { "path": "/Second/mything.txt", "name": "mything.txt", "value": "/2/2", "type": "file" },
             ]
@@ -35,5 +36,11 @@ def RunMe(urlObject = None):
                 { "path": "/2nd/myfile.txt", "name": "myfile.txt", "value": "/3/1", "type": "file" },
                 { "path": "/2nd/mything.txt", "name": "mything.txt", "value": "/3/2", "type": "file" },
             ]
+        elif currentitem == "/1/2":
+            retval =  [
+                { "path": "/First/MySecondFolder/Onefile.txt", "name": "Onefile.txt", "value": "/1/2/3", "type": "file" },
+                { "path": "/First/MySecondFolder/Twofile.txt", "name": "Twofile.txt", "value": "/1/2/4", "type": "file" }
+            ]
+
     
     return json.dumps(retval)
