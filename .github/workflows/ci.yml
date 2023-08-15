@@ -1,0 +1,40 @@
+name: "Terraform CI"
+
+on:
+  push:
+    branches: ["main"]
+
+jobs:
+  terraform_apply:
+    name: Terraform apply
+    strategy:
+      matrix:
+        terraform-dir: [promapp, platform, esign, process-intelligence, design-system, templates, wiki, process-management, nxc, hello]
+    runs-on: ubuntu-latest
+    env:
+      ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
+      TF_VAR_token: ${{ secrets.TF_VAR_token }}
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform fmt
+        id: fmt
+        run: terraform fmt -check
+        continue-on-error: true
+
+      - name: Terraform Init
+        id: init
+        run: terraform init -backend-config='../backend.conf'
+        working-directory: "repositories/${{ matrix.terraform-dir }}"
+
+      - name: Terraform Apply
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        run: terraform apply -auto-approve -input=false 
+        working-directory: 'repositories/${{ matrix.terraform-dir }}'
