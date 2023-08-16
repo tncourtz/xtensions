@@ -9,7 +9,7 @@ jobs:
     name: Terraform apply
     strategy:
       matrix:
-        terraform-dir: [promapp, platform, esign, process-intelligence, design-system, templates, wiki, process-management, nxc, hello-remote]
+        terraform-dir: [promapp, platform, esign, process-intelligence, design-system, templates, wiki, process-management, nxc, hello]
     runs-on: ubuntu-latest
     env:
       ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
