@@ -3,13 +3,16 @@ name: "Terraform CI"
 on:
   push:
     branches: ["main"]
+    
+  workflow_dispatch:
+    
 
 jobs:
   terraform_apply:
     name: Terraform apply
     strategy:
       matrix:
-        terraform-dir: [promapp, platform, esign, process-intelligence, design-system, templates, wiki, process-management, nxc, hello]
+        terraform-dir: ["Death-Star"]
     runs-on: ubuntu-latest
     env:
       ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
@@ -35,6 +38,6 @@ jobs:
         working-directory: "repositories/${{ matrix.terraform-dir }}"
 
       - name: Terraform Apply
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        # if: github.ref == 'refs/heads/main' && github.event_name == 'push'
         run: terraform apply -auto-approve -input=false 
         working-directory: 'repositories/${{ matrix.terraform-dir }}'
