@@ -1,0 +1,14 @@
+# See for more details: https://backstage.io/docs/features/software-catalog/descriptor-format
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: xtensions
+  description: Catalog configuration for xtensions repo.
+  annotations:
+    github.com/project-slug: NintexGlobal/xtensions
+  tags:
+    - github
+spec:
+  type: service
+  lifecycle: production
+  owner: group:default/guardians
