@@ -12,7 +12,7 @@ jobs:
     name: Terraform apply
     strategy:
       matrix:
-        terraform-dir: ["Death-Star"]
+        terraform-dir: [wiki, process-management, nxc, robot, docgen, ai]
     runs-on: ubuntu-latest
     env:
       ARM_ACCESS_KEY: ${{ secrets.ARM_ACCESS_KEY }}
